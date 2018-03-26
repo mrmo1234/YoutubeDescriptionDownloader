@@ -18,13 +18,23 @@ Its usage is pretty basic, there are no command line arguments and it’s paths 
 When you first run the python file, it will create blank versions of the input files it needs.
 You can then populate this file with your own URLs or copy the list from another program.
 
-An exsample use would be 
+An example use would be that you want to pull all the descriptions from this Wiki page https://en.wikipedia.org/wiki/List_of_most-disliked_YouTube_videos
 
-How long will it work for?
+First you download YoutubeDescriptionDownloader, You will have 3 Folders. In this case we need to extract the youtube links from the wiki page "2. Download Links on a page" will do this for us. Running LinkDownloader.py will prompt it to create URLlist.txt this you can add https://en.wikipedia.org/wiki/List_of_most-disliked_YouTube_videos
+
+If you would like to do more than page you can add more URLs on new lines. Don't add blank lines before URLs, this will make it think it has reached the end of the list.
+
+YoutubeVideoList.txt will be created with a list of all found YouTube Links. "2. Download Links on a page" is not capable of detecting duplicates, This is not an issue for "3. Download Descripsions with links" however it is something to be aware of if you plan to use this list in another program.
+
+We can now copy YoutubeVideoList.txt and place it in the folder "3. Download Descripsions with links", Now when we run YoutubeDescriptionDownloader.py an output folder named "Youtube Description Downloader Output" will be created.
+By default the output will be organised by YouTube channel. This can be disabled by editing into YoutubeDescriptionDownloader.py and changing organiseuser = True on line 17 to False.
+
+
+How long into the foreseeable future will this project work for?
 --------------
-"1. Download Links per User" Is probably the most robust as it uses the Youtube API, Will will work as long as the YouTube Data API v3 is available.
+"1. Download Links per User" Is probably the most robust as it uses the Youtube API, This will work as long as the YouTube Data API v3 is available.
 
-“2. Download Links on a page” Searches for strings like“https://www.youtube.com/watc” and “/watch”. New domains like http://youtu.be not work until fixed.
+“2. Download Links on a page” Searches for strings like “https://www.youtube.com/watc” and “/watch” in the HTML of pages. New domains like http://youtu.be not work until fixed.
 
 “3. Download Descripsions with links” Unfortunately is not based on the API and is vulnerable to the minor layout changes that YouTube has every 6 months.
 
