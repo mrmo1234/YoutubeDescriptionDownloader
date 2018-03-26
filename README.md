@@ -22,4 +22,13 @@ An exsample use would be
 
 How long will it work for?
 --------------
-1. Download Links per User
+"1. Download Links per User" Is probably the most robust as it uses the Youtube API, Will will work as long as the YouTube Data API v3 is available.
+
+“2. Download Links on a page” Searches for strings like“https://www.youtube.com/watc” and “/watch”. New domains like http://youtu.be not work until fixed.
+
+“3. Download Descripsions with links” Unfortunately is not based on the API and is vulnerable to the minor layout changes that YouTube has every 6 months.
+
+It won't work what can I do?
+--------------
+The most commnon issue I had python libarys not installed properly or my internet connection beeing funny.
+I don't really expect anyone to take any interrest in this so I don't plan to update it regulay but open issue on github with any URLs that don't work and I/Someone may be able to sugest a fix.
