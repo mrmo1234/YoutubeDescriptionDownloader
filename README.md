@@ -40,5 +40,5 @@ How long into the foreseeable future will this project work for?
 
 It won't work what can I do?
 --------------
-The most commnon issue I had python libarys not installed properly or my internet connection beeing funny.
-I don't really expect anyone to take any interrest in this so I don't plan to update it regulay but open issue on github with any URLs that don't work and I/Someone may be able to sugest a fix.
+The most common issue I had was python libarys not installed properly or my internet connection beeing funny.
+I don't really expect anyone to take any interrest in this but you can open issue on github with any URLs that don't work and I/Someone may be able to suggest a fix.
