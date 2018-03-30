@@ -156,15 +156,19 @@ def DownloadandWrite(yturl):
     #List Links at end
     deslinks = outputdata.find(id="eow-description")
     file.write ("\r\n\r\n###End of Description###\r\n\r\nFULL LINKS")
-    for link in deslinks.find_all('a'):#Youtube gives you the link as a YT Redirect, This takes that URL and converts it
-        url2 = link.get("href")
-        urlRedirect = "https://www.youtube.com"+url2
-        rRedirect = requests.get(urlRedirect)
-        rRedirectData = BeautifulSoup(rRedirect.content, 'html.parser')
-        gotoSitebutton = rRedirectData.find(id="invalid-token-redirect-goto-site-button")       
-        file.write ("\r\n")
-        file.write(gotoSitebutton.get("href"))
-
+    for link in deslinks.find_all('a'):
+        print (link.get("href"))
+        if link.get("href")[:10] == "/redirect?":#Youtube gives external links as a YT Redirects, This takes that URL and converts it
+            url2 = link.get("href")
+            urlRedirect = "https://www.youtube.com"+url2
+            rRedirect = requests.get(urlRedirect)
+            rRedirectData = BeautifulSoup(rRedirect.content, 'html.parser')
+            gotoSitebutton = rRedirectData.find(id="invalid-token-redirect-goto-site-button")       
+            file.write ("\r\n")
+            file.write(gotoSitebutton.get("href"))
+        else:
+            file.write ("\r\n")
+            file.write(link.get("href"))
     file.close()
     filelog.close()
     print ("Finished "+str(yturl).rstrip()+"\r\n")

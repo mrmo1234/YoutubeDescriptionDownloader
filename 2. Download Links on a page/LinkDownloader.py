@@ -16,38 +16,31 @@ def DownloadandWrite(url):
     r = requests.get(url)
     #Start BeautifulSouping and downloaded content
     outputdata = BeautifulSoup(r.content, 'html.parser')
-    yttitle = str(outputdata.title.string)+" - List of Youtube URLs.txt"
-    #Prevent Errors by stripping out unsuitable characters
-    print (yttitle)
-    yttitle = repr(yttitle).replace("\\","")[1:-1]
-    keepcharacters = keepcharacters = (' ','.','_','(',')','-','Ω','[',']','&')
-    yttitle = "".join(c for c in yttitle if c.isalnum() or c in keepcharacters).rstrip()
-    print (yttitle)
-    #Open and name the file
-    #Blank exstiting file
-    #file=open(yttitle,"w")
-    #file.close()
+    print (str("Processing:"+outputdata.title.string))
     #Write out data
     file=open("YoutubeVideoList.txt","a")
-
     lastfile = None
     for link in outputdata.find_all('a'):
         linkdec = str(link.get("href"))
         linkdecshort = linkdec[:6]
+        linkdecmed = linkdec[:16]
         linkdeclong = linkdec[:28]
         if linkdecshort == "/watch":
-            if lastfile == "https://www.youtube.com"+linkdec:
+            if lastfile == "https://www.youtube.com"+linkdec:#Basic Duplicate detection, This is mainly for youtube pages that has loads of sequential  duplicates
                 print ("Detected Duplicate")
                 print ("https://www.youtube.com"+linkdec+" Not Outputed")
             else:
                 file.write ("https://www.youtube.com"+linkdec)
                 file.write ("\n")
                 lastfile = "https://www.youtube.com"+linkdec
+
+        elif linkdecmed == "https://youtu.be" or linkdecmed == "http://youtu.be/":
+            file.write (linkdec)
+            file.write ("\n")
         elif linkdeclong == "https://www.youtube.com/watc" or linkdeclong == "http://www.youtube.com/watch":
             file.write (linkdec)
             file.write ("\n")
-
-
+            
 #Load in URL list
 URLlistPath = "URLlist.txt"
 filepresent = os.path.isfile(URLlistPath)
@@ -62,7 +55,6 @@ else:
         print ("Can't Create file! Check file permissions!")
     sleep(5)
     sys.exit()
-
 
 #Do until urllist.txt is EOF
 state = "NOT DONE"
