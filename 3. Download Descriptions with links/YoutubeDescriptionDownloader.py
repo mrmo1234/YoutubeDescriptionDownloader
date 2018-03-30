@@ -157,7 +157,6 @@ def DownloadandWrite(yturl):
     deslinks = outputdata.find(id="eow-description")
     file.write ("\r\n\r\n###End of Description###\r\n\r\nFULL LINKS")
     for link in deslinks.find_all('a'):
-        print (link.get("href"))
         if link.get("href")[:10] == "/redirect?":#Youtube gives external links as a YT Redirects, This takes that URL and converts it
             url2 = link.get("href")
             urlRedirect = "https://www.youtube.com"+url2
