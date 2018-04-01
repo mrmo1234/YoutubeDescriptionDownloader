@@ -10,17 +10,18 @@ import time
 import codecs
 import sys
 import os
+import shutil #New for downloading jpgs
 
-def DownloadandWrite(yturl):
+#Organise .txts in to folders by User - Change to True/False
+organiseuser = True
+downloadTumbnail = True
 
-    #Organise .txts in to folders by User - Change to True/False
-    organiseuser = True
-
+def DownloadandWrite(yturl,organiseuser):
     #Open Log file
     filelog=codecs.open("Youtube Description downloader log.txt","a","utf-8")
     
     #Prepare YouTube URL (yturl) and Time
-    yturl = yturl.rstrip()
+    yturl = yturl.rstrip()#Removes newlines
     print ("Started "+str(yturl).rstrip())
     today = datetime.date.today()
     today = str(today)
@@ -84,13 +85,9 @@ def DownloadandWrite(yturl):
         txtoutputlocation = ".\\Youtube Description Downloader Output\\"+yttitle
         file=codecs.open(txtoutputlocation,"w","utf-8")
         file.close()
-
-
+        
     #Open files
     if organiseuser == True:
-
-        
-        
         if not os.path.exists(".\\Youtube Description Downloader Output\\"+usernameDIR+"\\"):
             os.makedirs(".\\Youtube Description Downloader Output\\"+usernameDIR+"\\")
         #Blank if organise by user
@@ -110,7 +107,7 @@ def DownloadandWrite(yturl):
         file.close()
         file=codecs.open(txtoutputlocation,"a","utf-8")
         file.write (justtitle+"\r\n")
-    file.write (yturl.rstrip())
+    file.write (yturl.rstrip())#.rstrip() removes newlines
     #Views
     file.write (" - ")
 
@@ -171,8 +168,43 @@ def DownloadandWrite(yturl):
     file.close()
     filelog.close()
     print ("Finished "+str(yturl).rstrip()+"\r\n")
-
-
+    return str(outputdata.title.string),usernameDIR
+def DownloadThumbnial(yturl,organiseuser,yttitle,usernameDIR):
+    #Get time for log file
+    today = datetime.date.today()
+    today = str(today)
+    localtime = datetime.datetime.now().time()
+    localtime = str(localtime)
+    #Open Log file
+    filelog=codecs.open("Youtube Description downloader log.txt","a","utf-8")
+    #Prevent Errors by stripping out unsuitable characters
+    yttitlebeforestrip = yttitle
+    yttitle = repr(yttitle).replace("\\","")[1:-1]
+    keepcharacters = keepcharacters = (' ','.','_','(',')','-','Ω','[',']','&')
+    yttitle = "".join(c for c in yttitle if c.isalnum() or c in keepcharacters).rstrip()
+    if yttitlebeforestrip != yttitle:
+        print ("File had to be renamed from:\r\n"+yttitlebeforestrip+"\r\nto:\r\n"+yttitle)
+        filelog.write (today+" "+localtime+" [RENAME] "+yttitlebeforestrip+" to "+yttitle+" "+yturl+"\r\n")
+        print ("A note has been saved to the Log")
+    VideoID = yturl.split("watch?v=",11)[1]
+    VideoID = VideoID.rstrip()
+    print (VideoID)
+    #Define Webpage
+    print ("https://img.youtube.com/vi/"+VideoID+"/maxresdefault.jpg")
+    response = requests.get("https://img.youtube.com/vi/"+VideoID+"/maxresdefault.jpg",stream=True)
+    
+    #Defines output folder
+    if organiseuser == True:
+        if not os.path.exists(".\\Youtube Description Downloader Output\\"+usernameDIR+"\\"):
+            os.makedirs(".\\Youtube Description Downloader Output\\"+usernameDIR+"\\")
+        #Blank if organise by user
+        jpgoutputlocation =".\\Youtube Description Downloader Output\\"+usernameDIR+"\\"+yttitle+' Thumbnail.jpg'
+    else:
+        jpgoutputlocation = yttitle+' - Thumbnail.jpg'
+    with open(jpgoutputlocation, 'wb') as out_file:
+        shutil.copyfileobj(response.raw, out_file)
+    del response
+    filelog.close()
 #Load in video list
 YoutubeVideoListPath = "YoutubeVideoList.txt"
 filepresent = os.path.isfile(YoutubeVideoListPath)
@@ -196,8 +228,9 @@ while state != "DONE":
     yturl=filelist.readline()
     if yturl != "":
         contentfound = True
-        DownloadandWrite(yturl)
+        yttitle,usernameDIR = DownloadandWrite(yturl,organiseuser)
         linesdonecount = linesdonecount + 1
+        if downloadTumbnail == True: DownloadThumbnial(yturl,organiseuser,yttitle,usernameDIR)
     else:
         state = "DONE"
         if contentfound != True:
