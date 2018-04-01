@@ -34,7 +34,7 @@ How long into the foreseeable future will this project work for?
 --------------
 "1. Download Links per User" Is probably the most robust as it uses the Youtube API, This will work as long as the YouTube Data API v3 is available.
 
-“2. Download Links on a page” Searches for strings like “https://www.youtube.com/watc” and “/watch” in the HTML of pages. New domains like http://youtu.be not work until fixed.
+“2. Download Links on a page” Searches for strings like “https://www.youtube.com/watc” and “/watch” in the HTML of pages. Any new domains that youtube adds will not work.
 
 “3. Download Descripsions with links” Unfortunately is not based on the API and is vulnerable to the minor layout changes that YouTube has every 6 months.
 
